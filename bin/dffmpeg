@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require 'thor'
+require "dffmpeg"
+class CLI < Thor
+  desc "server", "TODO:"
+  option :uri, type: :string, default: "druby://localhost:12345"
+  def server
+    Dffmpeg::Server.call(options[:uri])
+  end
+
+  desc "transcode", "TODO:"
+  option :uri, type: :string, default: "druby://localhost:12345"
+  def transcode(path)
+    Dffmpeg::Transcode.new(path, options[:uri]).call
+  end
+
+  desc "worker", "TODO:"
+  option :uri, type: :string, default: "druby://localhost:12345"
+  def worker
+    Dffmpeg::Worker.call(options[:uri])
+  end
+end
+
+CLI.start(ARGV)
