@@ -29,14 +29,17 @@ module Dffmpeg
 
     def split
       print "Spliting..."
+      # Very small size for testing, it should allow read it from params or
+      # calculate it based on the video lenght.
       size = 10
       `ffmpeg -i #{path} -map 0 -c copy -f segment -segment_time #{size} -segment_list #{segment_list.path} -reset_timestamps 1 #{tmp_dir}/%04d.mkv`
     end
 
     def send_commands
       CSV.read(segment_list.path, headers: [:filename, :from, :to]).each do |row|
-        command = ['transcode', tmp_path(row[:filename])]
-        puts "Sending: #{command}"
+        file = File.open(tmp_path(row[:filename]))
+        command = ['transcode', tmp_path(row[:filename]), file.read]
+        # puts "Sending: #{command}"
         ts.write(command)
       end
     end
@@ -56,6 +59,7 @@ module Dffmpeg
       output_path = "#{path}.mp4"
       puts "Joining for final file: #{output_path}"
 
+      # It is failing because too many open files
       command = "ffmpeg -y -i 'concat:#{transcoded_pieces.join('|')}' -c copy #{output_path}"
       puts "Running:"
       puts command

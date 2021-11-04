@@ -10,7 +10,7 @@ module Dffmpeg
 
       loop do
         puts "Ready for tasks..."
-        action, input_path = ts.take(['transcode', String])
+        action, input_path, file = ts.take(['transcode', String, nil])
         movie = FFMPEG::Movie.new(input_path)
         output_path = "#{input_path}.ts"
         movie.transcode(output_path) { |progress| puts progress }
