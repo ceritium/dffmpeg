@@ -1,6 +1,6 @@
 # Dffmpeg
 
-It is an small app for experimenting with drb. It is not working, don't use it.
+It is a small app for experimenting with drb. It is not working, don't use it.
 
 ## Usage
 
